@@ -144,16 +144,16 @@ resource "oci_core_security_list" "drogaprogramisty-security-list" {
   ingress_security_rules {
     description = "allow tcp access to port 3000"
     protocol    = "6"         # TCP
-    source      = "0.0.0.0/0" # Open to the world
+    source      = "0.0.0.0/0" # Open to anyone
     tcp_options {
       min = 3000
       max = 3000
     }
   }
   ingress_security_rules {
-    description = "allow ssh access"
+    description = "allow ssh access, important, without that you can't access server"
     protocol    = "6"         # TCP
-    source      = "0.0.0.0/0" # Open to the world
+    source      = "0.0.0.0/0" # Open to anyone
     tcp_options {
       min = 22
       max = 22
