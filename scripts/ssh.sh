@@ -5,7 +5,7 @@ HOST="ubuntu@xxx.xx.xxx.xxx" # IPv4 public address of your instance, see: https:
 
 ssh "$HOST"
 
-# The first time you use ssh you might need to supply the certificate.
+# The first time you use ssh you must supply the certificate.
 # First, move your private key to this directory (named 'server.key'), then:
-# run this instead (comment previous ssh command, uncomment this command):
+# supply the certificate like this:
 # ssh -i ./server.key "$HOST"
