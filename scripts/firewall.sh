@@ -1,5 +1,8 @@
 #!/bin/bash
 # DO NOT EXECUTE THIS SCRIPT LOCALLY, run ./firewall_runner.sh instead, to run it on your instance.
+set -e
+
+sudo apt update -y && sudo apt upgrade -y
 
 if ! command -v firewall-cmd &> /dev/null; then
     echo "firewalld not found, installing..."
