@@ -174,13 +174,14 @@ resource "oci_core_internet_gateway" "drogaprogramisty-gateway" {
   display_name   = "drogaprogramisty-gateway"
 }
 
-resource "oci_core_route_table" "drogaprogramisty-route-table" {
+resource "oci_core_default_route_table" "drogaprogramisty-route-table" {
   compartment_id = var.compartment_id
-  vcn_id         = oci_core_vcn.drogaprogramisty-vcn.id
+  manage_default_resource_id = oci_core_vcn.drogaprogramisty-vcn.default_route_table_id
+
   display_name   = "drogaprogramisty-route-table"
   route_rules {
+    network_entity_id = oci_core_internet_gateway.drogaprogramisty-gateway.id
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
-    network_entity_id = oci_core_internet_gateway.drogaprogramisty-gateway.id
   }
 }
