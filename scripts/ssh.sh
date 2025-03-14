@@ -7,7 +7,7 @@ ssh "$HOST"
 
 # The first time you use ssh you must supply the certificate.
 # First, move your private key to this directory (named 'server.key'), then:
-# change certificate permissions:
+# change certificate permissions (only once):
 # chmod 400 ./server.key
-# then, supply it to ssh command:
+# then, supply it to ssh command (only once):
 # ssh -i ./server.key "$HOST"
