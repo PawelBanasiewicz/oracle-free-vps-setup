@@ -21,7 +21,7 @@ resource "oci_core_vcn" "drogaprogramisty-vcn" {
   cidr_blocks = [
     "10.0.0.0/24",
   ]
-  display_name   = "My main VCN"
+  display_name   = "drogaprogramisty-vcn"
   dns_label      = "vcn01241828"
   is_ipv6enabled = false
 }
@@ -29,6 +29,7 @@ resource "oci_core_vcn" "drogaprogramisty-vcn" {
 resource "oci_core_subnet" "drogaprogramisty-subnet" {
   compartment_id    = var.compartment_id
   vcn_id            = oci_core_vcn.drogaprogramisty-vcn.id
+  display_name      = "drogaprogramisty-subnet"
   security_list_ids = [oci_core_security_list.drogaprogramisty-security-list.id]
   cidr_block        = "10.0.0.0/24"
 }
@@ -140,7 +141,7 @@ resource "oci_core_instance" "drogaprogramisty-instance" {
 resource "oci_core_security_list" "drogaprogramisty-security-list" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.drogaprogramisty-vcn.id
-
+  display_name   = "drogaprogramisty-security-list"
   ingress_security_rules {
     description = "allow tcp access to port 3000"
     protocol    = "6"         # TCP
@@ -164,5 +165,22 @@ resource "oci_core_security_list" "drogaprogramisty-security-list" {
     protocol         = "6" # TCP
     destination      = "0.0.0.0/0"
     destination_type = "CIDR_BLOCK" # default
+  }
+}
+
+resource "oci_core_internet_gateway" "drogaprogramisty-gateway" {
+  compartment_id = var.compartment_id
+  vcn_id         = oci_core_vcn.drogaprogramisty-vcn.id
+  display_name   = "drogaprogramisty-gateway"
+}
+
+resource "oci_core_route_table" "drogaprogramisty-route-table" {
+  compartment_id = var.compartment_id
+  vcn_id         = oci_core_vcn.drogaprogramisty-vcn.id
+  display_name   = "drogaprogramisty-route-table"
+  route_rules {
+    destination       = "0.0.0.0/0"
+    destination_type  = "CIDR_BLOCK"
+    network_entity_id = oci_core_internet_gateway.drogaprogramisty-gateway.id
   }
 }
