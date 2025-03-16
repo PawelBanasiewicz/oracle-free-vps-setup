@@ -4,7 +4,7 @@ The repository contains all that is required to create fully functional oracle v
 
 # Created with love by:
 
-https://youtube.com/@drogaprogramisty
+https://youtube.com/@drogaprogramisty  
 https://www.instagram.com/drogaprogramisty
 
 # How to use:
