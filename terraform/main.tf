@@ -15,34 +15,31 @@ provider "oci" {
   region           = "eu-frankfurt-1"
 }
 
-resource "oci_core_vcn" "drogaprogramisty-vcn" {
+resource "oci_core_vcn" "vcn" {
   compartment_id = var.compartment_id
 
   cidr_blocks = [
     "10.0.0.0/24",
   ]
-  display_name   = "drogaprogramisty-vcn"
+  display_name   = "vcn"
   dns_label      = "vcn01241828"
   is_ipv6enabled = false
 }
 
-resource "oci_core_subnet" "drogaprogramisty-subnet" {
+resource "oci_core_subnet" "subnet" {
   compartment_id    = var.compartment_id
-  vcn_id            = oci_core_vcn.drogaprogramisty-vcn.id
-  display_name      = "drogaprogramisty-subnet"
-  security_list_ids = [oci_core_security_list.drogaprogramisty-security-list.id]
+  vcn_id            = oci_core_vcn.vcn.id
+  display_name      = "subnet"
+  security_list_ids = [oci_core_security_list.security-list.id]
   cidr_block        = "10.0.0.0/24"
 }
 
-resource "oci_core_instance" "drogaprogramisty-instance" {
+resource "oci_core_instance" "instance" {
   availability_domain                     = var.availability_domain
   compartment_id                          = var.compartment_id
   preserve_data_volumes_created_at_launch = true
 
-  defined_tags = {
-    "Oracle-Tags.CreatedBy" = "Created with love and help of https://youtube.com/@drogaprogramisty"
-  }
-  display_name = "drogaprogramisty-instance"
+  display_name = "instance"
   fault_domain = "FAULT-DOMAIN-3"
   metadata = {
     "ssh_authorized_keys" = var.ssh_public_key
@@ -106,9 +103,9 @@ resource "oci_core_instance" "drogaprogramisty-instance" {
   create_vnic_details {
     assign_private_dns_record = true
     assign_public_ip          = true
-    display_name              = "drogaprogramisty-instance"
+    display_name              = "instance"
     skip_source_dest_check    = false
-    subnet_id                 = oci_core_subnet.drogaprogramisty-subnet.id
+    subnet_id                 = oci_core_subnet.subnet.id
   }
 
   instance_options {
@@ -138,17 +135,17 @@ resource "oci_core_instance" "drogaprogramisty-instance" {
   }
 }
 
-resource "oci_core_security_list" "drogaprogramisty-security-list" {
+resource "oci_core_security_list" "security-list" {
   compartment_id = var.compartment_id
-  vcn_id         = oci_core_vcn.drogaprogramisty-vcn.id
-  display_name   = "drogaprogramisty-security-list"
+  vcn_id         = oci_core_vcn.vcn.id
+  display_name   = "security-list"
   ingress_security_rules {
-    description = "allow tcp access to port 3000"
+    description = "allow tcp access to port 8080"
     protocol    = "6"         # TCP
     source      = "0.0.0.0/0" # Open to anyone
     tcp_options {
-      min = 3000
-      max = 3000
+      min = 8080
+      max = 8080
     }
   }
   ingress_security_rules {
@@ -168,19 +165,19 @@ resource "oci_core_security_list" "drogaprogramisty-security-list" {
   }
 }
 
-resource "oci_core_internet_gateway" "drogaprogramisty-gateway" {
+resource "oci_core_internet_gateway" "gateway" {
   compartment_id = var.compartment_id
-  vcn_id         = oci_core_vcn.drogaprogramisty-vcn.id
-  display_name   = "drogaprogramisty-gateway"
+  vcn_id         = oci_core_vcn.vcn.id
+  display_name   = "gateway"
 }
 
-resource "oci_core_default_route_table" "drogaprogramisty-route-table" {
+resource "oci_core_default_route_table" "route-table" {
   compartment_id = var.compartment_id
-  manage_default_resource_id = oci_core_vcn.drogaprogramisty-vcn.default_route_table_id
+  manage_default_resource_id = oci_core_vcn.vcn.default_route_table_id
 
-  display_name   = "drogaprogramisty-route-table"
+  display_name   = "route-table"
   route_rules {
-    network_entity_id = oci_core_internet_gateway.drogaprogramisty-gateway.id
+    network_entity_id = oci_core_internet_gateway.gateway.id
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
   }
